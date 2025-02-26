@@ -66,4 +66,4 @@ function searchProducts(query, category = '', limit = 10) {
   }
   
   // Experiment with different queries and categories
-  searchProducts('sofa', 'sofas-loveseats'); // Example: broader search term with category
+  searchProducts('pleated skirt', ''); // Example: broader search term with category
