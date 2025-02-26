@@ -1,0 +1,21 @@
+{
+  "name": "shop_online",
+  "version": "1.0.0",
+  "description": "## Tech Stack - **Frontend**: React.js, - **Backend**: Node.js, Express - **Hosting**: AWS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshua0983/shop_online.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshua0983/shop_online/issues"
+  },
+  "homepage": "https://github.com/joshua0983/shop_online#readme"
+}
