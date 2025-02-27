@@ -1,4 +1,4 @@
-require('dotenv').config(); // Load .env variables
+require('dotenv').config({path:"../.env"}); 
 
 const apiKey = process.env.SHOPSTYLE_API_KEY;
 const endpoint = 'https://api.shopstylecollective.com/api/v2/products';
@@ -66,4 +66,4 @@ function searchProducts(query, category = '', limit = 10) {
   }
   
   // Experiment with different queries and categories
-  searchProducts('pleated skirt', ''); // Example: broader search term with category
+  searchProducts('tinted moisturizer', ''); // Example: broader search term with category
