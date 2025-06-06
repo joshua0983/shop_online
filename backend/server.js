@@ -1,11 +1,12 @@
 const express = require('express');
+const path = require('path');
 const apiKey = process.env.SHOPSTYLE_API_KEY;
 const apiUsername = process.env.SHOPSTYLE_API_USERNAME;
 const endpoint = 'https://api.shopstylecollective.com/api/v2/products'
 const app = express();
 const port = 3000;
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 app.get('/search', (req, res) => {
