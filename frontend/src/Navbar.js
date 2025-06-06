@@ -5,7 +5,7 @@ function Navbar() {
         <nav className="navbar">
         <div className="navbar-container">
             <a href="/" className="navbar-logo">
-            MyApp
+            SHOP ONLINE
             </a>
             <ul className="nav-menu">
             <li className="nav-item">
