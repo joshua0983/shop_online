@@ -39,3 +39,32 @@
 .nav-links:hover {
   color: #fff0f5; /* Lighter pink on hover */
 }
+
+.nav-search {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.nav-search-input {
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px 0 0 4px;
+  border: none;
+  outline: none;
+}
+
+.nav-search-btn {
+  padding: 0.3rem 0.9rem;
+  border-radius: 0 4px 4px 0;
+  border: none;
+  background: #fff0f5;
+  color: #ff69b4;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-search-btn:hover {
+  background: #ff69b4;
+  color: #fff;
+}
