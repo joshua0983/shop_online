@@ -8,11 +8,20 @@ function Body({ searchQuery }) {
         if (!searchQuery) return;
         setLoading(true);
         fetch(`/search?query=${searchQuery}`)
-        .then(res => res.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`error ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             setResults(data.products || []);
             setLoading(false);
-        });
+        })
+        .catch(error => {
+            console.error('Error fetching search results:', error);
+            setLoading(false);
+        })
     }, [searchQuery]);
     return (
         <div className="body-container">

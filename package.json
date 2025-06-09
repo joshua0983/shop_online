@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run client\" \"npm run start\""
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/joshua0983/shop_online/issues"
   },
-  "homepage": "https://github.com/joshua0983/shop_online#readme"
+  "homepage": "https://github.com/joshua0983/shop_online#readme",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
 }
