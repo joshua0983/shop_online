@@ -5,6 +5,7 @@ function Navbar( { onSearch }) {
     const [input, setInput] = useState("");
     const handleSumbit = (e) => {
         e.preventDefault();
+        console.log("Search query", input);
         onSearch(input);
     };
     return (

@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
 
 app.get('/search', (req, res) => {
     // Get search parameters from query string
+    console.log('Received search request:', req.query);
     const query = req.query.query || '';
     const category = req.query.category || '';
     const limit = req.query.limit || 10;
@@ -61,8 +62,10 @@ app.get('/search', (req, res) => {
               categories: productCategories
             };
           });
+          console.log(`Results for "${query}"`);
           res.json({ products: results });
         } else {
+          console.log("No products found.");
           res.json({ message: "No products found." });
         }
       })
