@@ -21,7 +21,14 @@ function Body({ searchQuery }) {
             ) : loading ? (
                 <h2>Loading...</h2>
             ) : (
-                <h2>Results for {searchQuery}</h2>
+                <>
+                    <h2>Results for {searchQuery}</h2>
+                    <ul>
+                        {results.map((item, idx) => (
+                            <li key={idx}>{item.name}  </li>
+                        ))}
+                    </ul>
+                </>
             )}
         </div>
 
