@@ -1,26 +1,15 @@
 {
-  "name": "shop_online",
+  "name": "shop_online_monorepo",
   "version": "1.0.0",
-  "description": "## Tech Stack - **Frontend**: React.js, - **Backend**: Node.js, Express - **Hosting**: AWS",
+  "description": "shop online",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run client\" \"npm run start\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/joshua0983/shop_online.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/joshua0983/shop_online/issues"
-  },
-  "homepage": "https://github.com/joshua0983/shop_online#readme",
   "devDependencies": {
     "concurrently": "^9.1.2"
-  }
+  },
+  "license": "ISC"
 }

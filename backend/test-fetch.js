@@ -1,4 +1,4 @@
-require('dotenv').config({path:"../.env"}); 
+require('dotenv').config({path:"./.env"}); 
 
 const apiKey = process.env.SHOPSTYLE_API_KEY;
 const endpoint = 'https://api.shopstylecollective.com/api/v2/products';

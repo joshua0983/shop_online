@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const apiKey = process.env.SHOPSTYLE_API_KEY;
@@ -5,6 +7,8 @@ const apiUsername = process.env.SHOPSTYLE_API_USERNAME;
 const endpoint = 'https://api.shopstylecollective.com/api/v2/products'
 const app = express();
 const port = 3001;
+const cors = require('cors');
+app.use(cors());
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });

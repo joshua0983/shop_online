@@ -7,7 +7,7 @@ function Body({ searchQuery }) {
     useEffect(() => {
         if (!searchQuery) return;
         setLoading(true);
-        fetch(`localhost:3001/search?query=${searchQuery}`)
+        fetch(`http://localhost:3001/search?query=${searchQuery}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`error ${response.status}`);
