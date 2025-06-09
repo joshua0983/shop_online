@@ -1,6 +1,12 @@
 import './Navbar.css';
+import React, { useState } from 'react';
 
-function Navbar() {
+function Navbar( { onSearch }) {
+    const [input, setInput] = useState("");
+    const handleSumbit = (e) => {
+        e.preventDefault();
+        onSearch(input);
+    };
     return (
         <nav className="navbar">
         <div className="navbar-container">
@@ -11,11 +17,14 @@ function Navbar() {
             </a>
             <ul className="nav-menu">
                 <li className="nav-item">
-                    <form className="nav-search">
+                    <form className="nav-search" onSubmit={handleSumbit}>
                         <input
                             type="text"
                             placeholder="Search..."
                             className="nav-search-input"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+
                         />
                         <button type="submit" className="nav-search-btn">
                             <i>Go</i>

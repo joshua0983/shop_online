@@ -1,9 +1,9 @@
 import React, {use, useEffect, useState} from "react";
 import "./Body.css";
 
-function Body() {
+function Body({ searchQuery }) {
     const [results, setResults] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(false);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (!searchQuery) return;
         setLoading(true);
