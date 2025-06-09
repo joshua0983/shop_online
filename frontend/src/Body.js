@@ -1,4 +1,4 @@
-import React, {use, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./Body.css";
 
 function Body({ searchQuery }) {
@@ -16,11 +16,13 @@ function Body({ searchQuery }) {
     }, [searchQuery]);
     return (
         <div className="body-container">
-           { searchQuery ? (
-            <h2>Results for {searchQuery}</h2>
-              ) : (
-            <h2>No search query provided.</h2>
-           )}
+           { !searchQuery ? (
+                <h2>No search query provided.</h2>
+            ) : loading ? (
+                <h2>Loading...</h2>
+            ) : (
+                <h2>Results for {searchQuery}</h2>
+            )}
         </div>
 
     )
