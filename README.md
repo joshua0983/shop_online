@@ -1,5 +1,7 @@
 # Shop Online
 
+## Using concurrently to connect Front-end and Back-end
+
 ## Tech Stack
 - **Frontend**: React.js,
 - **Backend**: Node.js, Express
