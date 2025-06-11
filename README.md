@@ -1,4 +1,5 @@
 # Shop Online
+# Version 1.0.0
 
 ## Using concurrently to connect Front-end and Back-end
 
