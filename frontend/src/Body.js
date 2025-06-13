@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./Body.css";
+import Item from './Item';
 
 function Body({ searchQuery }) {
     const [results, setResults] = useState([]);
@@ -34,7 +35,7 @@ function Body({ searchQuery }) {
                     <h2>Results for {searchQuery}</h2>
                     <ul>
                         {results.map((item, idx) => (
-                            <li key={idx}>{item.name}  </li>
+                            <Item key={idx} item={item} />
                         ))}
                     </ul>
                 </>
