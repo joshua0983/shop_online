@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f5f5;  /* Light background for empty spaces */
+    background: #FFFFFF;  
 }
 
 .item-image img {
