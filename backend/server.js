@@ -48,18 +48,24 @@ app.get('/search', (req, res) => {
           const results = data.products.map(product => {
             const productName = product.name;
             let productImage = '';
+            
+            // Get the best quality image available
             if (product.image && product.image.sizes) {
-              if (product.image.sizes.Large && product.image.sizes.Large.url) {
-                productImage = product.image.sizes.Large.url;
+              if (product.image.sizes.Best && product.image.sizes.Best.url) {
+                productImage = product.image.sizes.Best.url;
               } else if (product.image.sizes.Original && product.image.sizes.Original.url) {
                 productImage = product.image.sizes.Original.url;
+              } else if (product.image.sizes.Large && product.image.sizes.Large.url) {
+                productImage = product.image.sizes.Large.url;
               } else if (product.image.sizes.Medium && product.image.sizes.Medium.url) {
                 productImage = product.image.sizes.Medium.url;
               }
             }
+            
             const productCategories = product.categories 
               ? product.categories.map(cat => cat.name).join(', ')
               : 'No category info';
+              
             return {
               name: productName,
               image: productImage,
