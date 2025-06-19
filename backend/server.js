@@ -8,6 +8,9 @@ const endpoint = 'https://api.shopstylecollective.com/api/v2/products'
 const app = express();
 const port = 3001;
 const cors = require('cors');
+const productCache = new Map();
+const nameCache = new Set(); // Add a Set to track product names
+
 app.use(cors());
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
@@ -37,7 +40,6 @@ app.get('/search', (req, res) => {
     console.log(`\nFetching products for query "${query}" ${category ? 'in category "' + category + '"' : ''}`);
     console.log('Params:', params.toString());
     
-    // Fetch products from the ShopStyle API
     fetch(`${endpoint}?${params.toString()}`)
       .then(response => {
         if (!response.ok) {
@@ -46,9 +48,17 @@ app.get('/search', (req, res) => {
         return response.json();
       })
       .then(data => {
-        // Map over the returned products to only return the desired fields
         if (data && data.products && data.products.length > 0) {
           const results = data.products.map(product => {
+            // Skip if product ID is already in cache
+            if (productCache.has(product.id)) {
+              return null;
+            }
+
+            if (nameCache.has(product.name)) {
+              return null;
+            }
+
             const productName = product.name;
             let productImage = '';
             
@@ -69,13 +79,20 @@ app.get('/search', (req, res) => {
               ? product.categories.map(cat => cat.name).join(', ')
               : 'No category info';
               
-            return {
+            const processedProduct = {
+              id: product.id,
               name: productName,
               image: productImage,
               categories: productCategories
             };
-          });
-          console.log(`Results for "${query}"`);
+
+            // Add to caches
+            productCache.set(product.id, processedProduct);
+            nameCache.add(productName);
+            return processedProduct;
+          }).filter(Boolean); // Remove null entries
+
+          console.log(`Results for "${query}" (${results.length} unique items, Cache size: ${productCache.size})`);
           res.json({ products: results });
         } else {
           console.log("No products found.");
@@ -86,7 +103,7 @@ app.get('/search', (req, res) => {
         console.error('Error:', error);
         res.status(500).json({ error: error.message });
       });
-  });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

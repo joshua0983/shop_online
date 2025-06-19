@@ -7,10 +7,12 @@ function Body({ searchQuery }) {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState(null);
     const observer = useRef();
-    
+    const currentQuery = useRef(searchQuery);
+
     const lastItemRef = useCallback(node => {
-        if (loading) return;
+        if (loading || !hasMore) return;
         if (observer.current) observer.current.disconnect();
         
         observer.current = new IntersectionObserver(entries => {
@@ -26,10 +28,13 @@ function Body({ searchQuery }) {
         setResults([]);
         setPage(1);
         setHasMore(true);
+        setError(null);
+        currentQuery.current = searchQuery;
     }, [searchQuery]);
 
     useEffect(() => {
-        if (!searchQuery) return;
+        if (!searchQuery || loading || !hasMore) return;
+        
         setLoading(true);
         fetch(`http://localhost:3001/search?query=${searchQuery}&page=${page}&limit=12`)
         .then(response => {
@@ -39,20 +44,31 @@ function Body({ searchQuery }) {
             return response.json();
         })
         .then(data => {
-            setResults(prevResults => [...prevResults, ...(data.products || [])]);
-            setHasMore(data.products.length > 0);
-            setLoading(false);
+            // Only update if we're still on the same search query
+            if (currentQuery.current === searchQuery) {
+                setResults(prevResults => {
+                    const newResults = [...prevResults, ...(data.products || [])];
+                    // If we got fewer results than requested, we've reached the end
+                    setHasMore(data.products && data.products.length === 12);
+                    return newResults;
+                });
+            }
         })
         .catch(error => {
             console.error('Error fetching search results:', error);
+            setError(error.message);
+        })
+        .finally(() => {
             setLoading(false);
         });
     }, [searchQuery, page]);
 
     return (
         <div className="body-container">
-           { !searchQuery ? (
+           {!searchQuery ? (
                 <h2>No search query provided.</h2>
+            ) : error ? (
+                <h2>Error: {error}</h2>
             ) : (
                 <>
                     <h2>Results for {searchQuery}</h2>
@@ -64,6 +80,7 @@ function Body({ searchQuery }) {
                         ))}
                     </ul>
                     {loading && <h2>Loading more...</h2>}
+                    {!hasMore && results.length > 0 && <h2>No more results</h2>}
                 </>
             )}
         </div>
