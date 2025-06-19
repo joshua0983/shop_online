@@ -79,7 +79,7 @@ function Body({ searchQuery }) {
                             </div>
                         ))}
                     </ul>
-                    {loading && <h2>Loading more...</h2>}
+                    {loading && <h2>Loading</h2>}
                     {!hasMore && results.length > 0 && <h2>No more results</h2>}
                 </>
             )}
