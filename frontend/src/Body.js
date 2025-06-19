@@ -5,6 +5,8 @@ import Item from './Item';
 function Body({ searchQuery }) {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [trending, setTrending] = useState([]);
+    const [trendingLoading, setTrendingLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
@@ -63,10 +65,46 @@ function Body({ searchQuery }) {
         });
     }, [searchQuery, page]);
 
+    // Add new useEffect for trending products
+    useEffect(() => {
+        if (!searchQuery) {
+            setTrendingLoading(true);
+            fetch('http://localhost:3001/trending/makeup')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`error ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setTrending(data.products || []);
+                })
+                .catch(error => {
+                    console.error('Error fetching trending products:', error);
+                })
+                .finally(() => {
+                    setTrendingLoading(false);
+                });
+        }
+    }, [searchQuery]);
+
     return (
         <div className="body-container">
-           {!searchQuery ? (
-                <h2>No search query provided.</h2>
+            {!searchQuery ? (
+                <>
+                    <h2 className="trending-title">Trending in Makeup</h2>
+                    {trendingLoading ? (
+                        <h3>Loading trending products...</h3>
+                    ) : (
+                        <ul className="trending-grid">
+                            {trending.map((item, idx) => (
+                                <div key={item.id}>
+                                    <Item item={item} />
+                                </div>
+                            ))}
+                        </ul>
+                    )}
+                </>
             ) : error ? (
                 <h2>Error: {error}</h2>
             ) : (

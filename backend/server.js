@@ -105,6 +105,55 @@ app.get('/search', (req, res) => {
       });
 });
 
+app.get('/trending/makeup', (req, res) => {
+    const params = new URLSearchParams({
+        pid: apiKey,
+        cat: 'beauty-makeup',
+        limit: 10,
+        sort: 'Popular'
+    });
+  
+    
+    fetch(`${endpoint}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.products && data.products.length > 0) {
+                const results = data.products.map(product => {
+                    const productName = product.name;
+                    let productImage = '';
+                    
+                    if (product.image && product.image.sizes) {
+                        if (product.image.sizes.Best && product.image.sizes.Best.url) {
+                            productImage = product.image.sizes.Best.url;
+                        } else if (product.image.sizes.Original && product.image.sizes.Original.url) {
+                            productImage = product.image.sizes.Original.url;
+                        }
+                    }
+                    
+                    return {
+                        id: product.id,
+                        name: productName,
+                        image: productImage,
+                        categories: product.categories.map(cat => cat.name).join(', ')
+                    };
+                });
+                
+                res.json({ products: results });
+            } else {
+                res.json({ products: [] });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            res.status(500).json({ error: error.message });
+        });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
