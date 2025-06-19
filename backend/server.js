@@ -18,13 +18,16 @@ app.get('/search', (req, res) => {
     console.log('Received search request:', req.query);
     const query = req.query.query || '';
     const category = req.query.category || '';
-    const limit = req.query.limit || 10;
-  
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
+    
     // Build URL parameters using free-text search parameter ("fts")
     const params = new URLSearchParams({
       pid: apiKey,
       fts: query,
-      limit: limit
+      limit: limit,
+      offset: offset
     });
     
     if (category) {
