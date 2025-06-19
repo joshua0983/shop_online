@@ -71,7 +71,7 @@ function Body({ searchQuery }) {
                 <h2>Error: {error}</h2>
             ) : (
                 <>
-                    <h2>Results for {searchQuery}</h2>
+                    <h2><i>Results for {searchQuery} </i></h2>
                     <ul>
                         {results.map((item, idx) => (
                             <div key={idx} ref={idx === results.length - 1 ? lastItemRef : null}>
