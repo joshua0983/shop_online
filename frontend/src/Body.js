@@ -46,11 +46,10 @@ function Body({ searchQuery }) {
             return response.json();
         })
         .then(data => {
-            // Only update if we're still on the same search query
             if (currentQuery.current === searchQuery) {
                 setResults(prevResults => {
                     const newResults = [...prevResults, ...(data.products || [])];
-                    // If we got fewer results than requested, we've reached the end
+
                     setHasMore(data.products && data.products.length === 12);
                     return newResults;
                 });
@@ -65,7 +64,6 @@ function Body({ searchQuery }) {
         });
     }, [searchQuery, page]);
 
-    // Add new useEffect for trending products
     useEffect(() => {
         if (!searchQuery) {
             setTrendingLoading(true);
