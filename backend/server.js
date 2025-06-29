@@ -78,7 +78,6 @@ app.get('/search', (req, res) => {
                 const results = data.products
                     .filter(product => isMakeupProduct(product)) // Add this filter
                     .map(product => {
-                        // Skip if product ID is already in cache
                         if (productCache.has(product.id)) {
                             console.log(`Product ${product.id} already cached`);
                             return null;
