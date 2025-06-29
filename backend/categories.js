@@ -11,7 +11,7 @@ fetch(`${categoriesEndpoint}?pid=${apiKey}`)
     return response.json();
   })
   .then(data => {
-    // The response might be an array or an object with a 'categories' property.
+  
     let categories = [];
     if (Array.isArray(data)) {
       categories = data;
