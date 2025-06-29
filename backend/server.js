@@ -110,7 +110,6 @@ app.get('/search', (req, res) => {
                             categories: productCategories
                         };
 
-                        // Add to cache
                         productCache.set(product.id, processedProduct);
                         nameCache.add(productName);
                         return processedProduct;
