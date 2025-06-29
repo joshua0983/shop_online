@@ -114,7 +114,7 @@ app.get('/search', (req, res) => {
                         productCache.set(product.id, processedProduct);
                         nameCache.add(productName);
                         return processedProduct;
-                    }).filter(Boolean); // Remove null entries
+                    }).filter(Boolean);
 
                 console.log(`Found ${results.length} unique makeup products for query "${query}"`);
                 res.json({ products: results });
