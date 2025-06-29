@@ -3,7 +3,6 @@ require('dotenv').config({path:"./.env"});
 const apiKey = process.env.SHOPSTYLE_API_KEY;
 const endpoint = 'https://api.shopstylecollective.com/api/v2/categories';
 
-// Function to fetch all categories
 function getAllCategories() {
     const params = new URLSearchParams({
         pid: apiKey
