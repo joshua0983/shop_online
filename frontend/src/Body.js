@@ -2,6 +2,19 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./Body.css";
 import Item from './Item';
 
+const FILTER_OPTIONS = [
+    { label: "All", value: "" },
+    { label: "Foundation", value: "foundation" },
+    { label: "Lipstick", value: "lipstick" },
+    { label: "Mascara", value: "mascara" },
+    { label: "Blush", value: "blush" },
+    { label: "Concealer", value: "concealer" },
+    { label: "Powder", value: "powder" },
+    { label: "Eyeliner", value: "eyeliner" },
+    { label: "Palette", value: "palette" },
+    // Add more as needed
+];
+
 function Body({ searchQuery }) {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -10,6 +23,7 @@ function Body({ searchQuery }) {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
+    const [filter, setFilter] = useState("");
     const observer = useRef();
     const currentQuery = useRef(searchQuery);
 
@@ -86,6 +100,14 @@ function Body({ searchQuery }) {
         }
     }, [searchQuery]);
 
+    // Filter results based on dropdown
+    const filteredResults = filter
+        ? results.filter(item =>
+            item.name.toLowerCase().includes(filter) ||
+            item.categories.toLowerCase().includes(filter)
+        )
+        : results;
+
     return (
         <div className="body-container">
             {!searchQuery ? (
@@ -108,15 +130,27 @@ function Body({ searchQuery }) {
             ) : (
                 <>
                     <h2><i>Results for {searchQuery} </i></h2>
+                    <div style={{ margin: "20px 0" }}>
+                        <label htmlFor="filter-dropdown" style={{ marginRight: 8 }}>Filter:</label>
+                        <select
+                            id="filter-dropdown"
+                            value={filter}
+                            onChange={e => setFilter(e.target.value)}
+                        >
+                            {FILTER_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
                     <ul>
-                        {results.map((item, idx) => (
-                            <div key={idx} ref={idx === results.length - 1 ? lastItemRef : null}>
+                        {filteredResults.map((item, idx) => (
+                            <div key={item.id || idx} ref={idx === filteredResults.length - 1 ? lastItemRef : null}>
                                 <Item item={item} />
                             </div>
                         ))}
                     </ul>
-                    {loading && <h2>Loading</h2>}
-                    {!hasMore && results.length > 0 && <h2>No more results</h2>}
+                    {loading && <h2>Loading more...</h2>}
+                    {!hasMore && filteredResults.length > 0 && <h2>No more results</h2>}
                 </>
             )}
         </div>
