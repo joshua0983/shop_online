@@ -61,9 +61,9 @@ function Body({ searchQuery }) {
         });
     }, [searchQuery, page]);
 
-    // Fetch filter options (categories) from backend
+    // Fetch all categories from backend
     useEffect(() => {
-        fetch('http://localhost:3001/makeup-categories')
+        fetch('http://localhost:3001/categories')
             .then(res => res.json())
             .then(data => {
                 if (data.categories && data.categories.length > 0) {

@@ -179,33 +179,31 @@ app.get('/trending/makeup', (req, res) => {
         });
 });
 
-app.get('/makeup-categories', (req, res) => {
+app.get('/categories', (req, res) => {
     const categoriesEndpoint = 'https://api.shopstylecollective.com/api/v2/categories';
     const params = new URLSearchParams({ pid: apiKey });
 
     fetch(`${categoriesEndpoint}?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
-          
-            let makeupCats = [];
+            let allCategories = [];
             if (data && data.categories) {
-                // Try to find "Beauty" or "Makeup" as a main category
-                const beauty = data.categories.find(cat =>
-                    cat.name.toLowerCase().includes('beauty')
-                );
-                if (beauty && beauty.subcategories) {
-                    // Find "Makeup" under Beauty
-                    const makeup = beauty.subcategories.find(sub =>
-                        sub.name.toLowerCase().includes('makeup')
-                    );
-                    if (makeup && makeup.subcategories) {
-                        makeupCats = makeup.subcategories.map(sub => sub.name);
-                    } else if (makeup) {
-                        makeupCats = [makeup.name];
+                data.categories.forEach(cat => {
+                    allCategories.push(cat.name);
+                    if (cat.subcategories) {
+                        cat.subcategories.forEach(sub => {
+                            allCategories.push(sub.name);
+                            if (sub.subcategories) {
+                                sub.subcategories.forEach(subsub => {
+                                    allCategories.push(subsub.name);
+                                });
+                            }
+                        });
                     }
-                }
+                });
             }
-            res.json({ categories: makeupCats });
+            allCategories = Array.from(new Set(allCategories)).sort();
+            res.json({ categories: allCategories });
         })
         .catch(error => {
             console.error('Error fetching categories:', error);
