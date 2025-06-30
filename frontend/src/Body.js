@@ -2,28 +2,13 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./Body.css";
 import Item from './Item';
 
-const FILTER_OPTIONS = [
-    { label: "All", value: "" },
-    { label: "Foundation", value: "foundation" },
-    { label: "Lipstick", value: "lipstick" },
-    { label: "Mascara", value: "mascara" },
-    { label: "Blush", value: "blush" },
-    { label: "Concealer", value: "concealer" },
-    { label: "Powder", value: "powder" },
-    { label: "Eyeliner", value: "eyeliner" },
-    { label: "Palette", value: "palette" },
-    // Add more as needed
-];
-
 function Body({ searchQuery }) {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [trending, setTrending] = useState([]);
-    const [trendingLoading, setTrendingLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState(null);
     const [filter, setFilter] = useState("");
+    const [filterOptions, setFilterOptions] = useState([{ label: "All", value: "" }]);
     const observer = useRef();
     const currentQuery = useRef(searchQuery);
 
@@ -44,7 +29,6 @@ function Body({ searchQuery }) {
         setResults([]);
         setPage(1);
         setHasMore(true);
-        setError(null);
         currentQuery.current = searchQuery;
     }, [searchQuery]);
 
@@ -71,34 +55,31 @@ function Body({ searchQuery }) {
         })
         .catch(error => {
             console.error('Error fetching search results:', error);
-            setError(error.message);
         })
         .finally(() => {
             setLoading(false);
         });
     }, [searchQuery, page]);
 
+    // Fetch filter options (categories) from backend
     useEffect(() => {
-        if (!searchQuery) {
-            setTrendingLoading(true);
-            fetch('http://localhost:3001/trending/makeup')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`error ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setTrending(data.products || []);
-                })
-                .catch(error => {
-                    console.error('Error fetching trending products:', error);
-                })
-                .finally(() => {
-                    setTrendingLoading(false);
-                });
-        }
-    }, [searchQuery]);
+        fetch('http://localhost:3001/makeup-categories')
+            .then(res => res.json())
+            .then(data => {
+                if (data.categories && data.categories.length > 0) {
+                    setFilterOptions([
+                        { label: "All", value: "" },
+                        ...data.categories.map(cat => ({
+                            label: cat,
+                            value: cat.toLowerCase()
+                        }))
+                    ]);
+                }
+            })
+            .catch(() => {
+                setFilterOptions([{ label: "All", value: "" }]);
+            });
+    }, []);
 
     // Filter results based on dropdown
     const filteredResults = filter
@@ -110,26 +91,8 @@ function Body({ searchQuery }) {
 
     return (
         <div className="body-container">
-            {!searchQuery ? (
+            {searchQuery && (
                 <>
-                    <h2 className="trending-title">Trending in Makeup</h2>
-                    {trendingLoading ? (
-                        <h3>Loading trending products...</h3>
-                    ) : (
-                        <ul className="trending-grid">
-                            {trending.map((item, idx) => (
-                                <div key={item.id}>
-                                    <Item item={item} />
-                                </div>
-                            ))}
-                        </ul>
-                    )}
-                </>
-            ) : error ? (
-                <h2>Error: {error}</h2>
-            ) : (
-                <>
-                    <h2><i>Results for {searchQuery} </i></h2>
                     <div style={{ margin: "20px 0" }}>
                         <label htmlFor="filter-dropdown" style={{ marginRight: 8 }}>Filter:</label>
                         <select
@@ -137,7 +100,7 @@ function Body({ searchQuery }) {
                             value={filter}
                             onChange={e => setFilter(e.target.value)}
                         >
-                            {FILTER_OPTIONS.map(opt => (
+                            {filterOptions.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>

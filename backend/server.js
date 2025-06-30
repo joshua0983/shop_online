@@ -179,6 +179,40 @@ app.get('/trending/makeup', (req, res) => {
         });
 });
 
+app.get('/makeup-categories', (req, res) => {
+    const categoriesEndpoint = 'https://api.shopstylecollective.com/api/v2/categories';
+    const params = new URLSearchParams({ pid: apiKey });
+
+    fetch(`${categoriesEndpoint}?${params.toString()}`)
+        .then(response => response.json())
+        .then(data => {
+          
+            let makeupCats = [];
+            if (data && data.categories) {
+                // Try to find "Beauty" or "Makeup" as a main category
+                const beauty = data.categories.find(cat =>
+                    cat.name.toLowerCase().includes('beauty')
+                );
+                if (beauty && beauty.subcategories) {
+                    // Find "Makeup" under Beauty
+                    const makeup = beauty.subcategories.find(sub =>
+                        sub.name.toLowerCase().includes('makeup')
+                    );
+                    if (makeup && makeup.subcategories) {
+                        makeupCats = makeup.subcategories.map(sub => sub.name);
+                    } else if (makeup) {
+                        makeupCats = [makeup.name];
+                    }
+                }
+            }
+            res.json({ categories: makeupCats });
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+            res.status(500).json({ error: error.message });
+        });
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
