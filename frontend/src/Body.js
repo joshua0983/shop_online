@@ -61,7 +61,6 @@ function Body({ searchQuery }) {
         });
     }, [searchQuery, page]);
 
-    // Fetch all categories from backend
     useEffect(() => {
         fetch('http://localhost:3001/categories')
             .then(res => res.json())
