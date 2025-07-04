@@ -9,7 +9,7 @@ const app = express();
 const port = 3001;
 const cors = require('cors');
 const productCache = new Map();
-const nameCache = new Set(); // Add a Set to track product names
+const nameCache = new Set();
 
 const MAKEUP_CATEGORIES = [
     'beauty-makeup',           
