@@ -45,7 +45,6 @@ const isMakeupProduct = (product) => {
     return nameMatch || categoryMatch;
 };
 
-// Modify the search endpoint's data processing
 app.get('/search', (req, res) => {
     // Get search parameters from query string
     console.log('Received search request:', req.query);
