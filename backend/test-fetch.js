@@ -21,7 +21,7 @@ function getAllCategories() {
         .then(data => {
             if (data && data.categories) {
                 console.log('\nAll Categories:');
-                // Create a hierarchical view of categories
+
                 data.categories.forEach(category => {
                     console.log(`\n${category.name}`);
                     if (category.subcategories) {
