@@ -185,7 +185,6 @@ app.get('/categories', (req, res) => {
     fetch(`${categoriesEndpoint}?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
-            // Flatten all categories and subcategories into a single array of names
             let allCategories = [];
             if (data && data.categories) {
                 data.categories.forEach(cat => {
