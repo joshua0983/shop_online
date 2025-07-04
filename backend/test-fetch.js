@@ -44,5 +44,4 @@ function getAllCategories() {
         });
 }
 
-// Run the function
 getAllCategories();
